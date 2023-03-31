@@ -114,8 +114,9 @@ class ArrayOrdered {
     if (index >= 0 && callback) {
       this.delete(element);
       this.add(callback(element, this._data));
+      return true;
     }
-    return this;
+    return false;
   }
 
   delete(element) {
@@ -124,6 +125,30 @@ class ArrayOrdered {
       return false;
     }
     this._data.splice(index, 1);
+    return true;
+  }
+
+  deletePrevious(element, isIncludingCurrent = false) {
+    let index = this.getElemIndex(element);
+    if (index < 0) {
+      return false;
+    }
+    if (isIncludingCurrent) {
+      index += 1;
+    }
+    this._data = this._data.slice(index);
+    return true;
+  }
+
+  deleteFollowing(element, isIncludingCurrent = false) {
+    let index = this.getElemIndex(element);
+    if (index < 0) {
+      return false;
+    }
+    if (!isIncludingCurrent) {
+      index += 1;
+    }
+    this._data = this._data.slice(0, index);
     return true;
   }
 

@@ -1,16 +1,30 @@
-# Ordered Array
+## ArrayOrdered
 
-ArrayOrdered is an array in which new elements are added in an ordered manner.
+An array that allows adding new elements in an ordered manner. The worst and average case complexity is O(log n), and the best case is O(1).
 
-The worst and average case time complexity is O(log n), and the best case is O(1).
+### Settings:
+- `isUnique` - only unique values
+- `isHomogeneous` - only data of the same type
+- `isProd` - production mode (disables some checks for faster performance)
 
-#### Settings:
-* isUnique - only unique values allowed
-* isHomogeneous - only data of the same type allowed
-* isProd - production mode (disables some checks for faster operation)
+### Methods:
+- `create` - creates an ordered array from the argument passed
+- `add` - adds an element in the order of sorting
+- `modify` - modifies the specified element if it exists using the passed function
+- `delete` - deletes the specified element if it exists
+- `deletePrevious` - deletes all elements following the element if it exists (if `isIncludingCurrent = true`, the specified element is also deleted)
+- `deleteFollowing` - same as `deletePrevious`, but works with preceding elements
+- `getElemIndex` - get the index of an element
+
+### Properties:
+- `size` - number of elements
+- `head` - first element
+- `tail` - all elements except the first
+- `last` - last element
+- `get` - get the array
 
 
-#### Examples of use:
+### Examples of use:
 ```
 const arr = new ArrayOrdered();
 arr
