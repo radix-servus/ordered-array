@@ -1,14 +1,10 @@
 class ArrayOrdered {
   constructor(settings) {
-    const {
-      isUnique = true,
-      isHomogeneous = true,
-      isProd = false,
-    } = settings || {};
+    const { rankingRule, isUnique = true, isProd = false } = settings || {};
     this._data = [];
     this._isUnique = isUnique;
-    this._isHomogeneous = isHomogeneous;
     this._isProd = isProd;
+    this._rankingRule = rankingRule || null;
   }
 
   get size() {
@@ -31,19 +27,35 @@ class ArrayOrdered {
     return this._data;
   }
 
-  create(array, ruleCallback) {
+  _compare(a, b) {
+    if (this._rankingRule) {
+      console.log(this._rankingRule(a, b));
+      return this._rankingRule(a, b);
+    }
+    if (a > b) {
+      return "GT";
+    }
+    if (a < b) {
+      return "LT";
+    }
+    return "EQ";
+  }
+
+  filter(callback) {
+    this._data = this._data.filter(callback);
+    return this;
+  }
+
+  create(array) {
     if (!this._isProd) {
       if (!Array.isArray(array)) {
         throw new TypeError(
           `[ArrayOrdered] Expected an array, got an ${typeof array}.`
         );
       }
-      if (
-        this._isHomogeneous &&
-        !array.every((elem) => typeof array[0] === typeof elem)
-      ) {
+      if (!array.every((elem) => typeof array[0] === typeof elem)) {
         throw new TypeError(
-          "[ArrayOrdered] Type mismatch: use the same type for the entire array or set the isHomogeneous flag to false."
+          "[ArrayOrdered] Type mismatch: use the same type for the entire array."
         );
       }
     }
@@ -52,8 +64,13 @@ class ArrayOrdered {
     if (this._isUnique) {
       result = [...new Set(result)];
     }
-    if (ruleCallback) {
-      result = result.sort((a, b) => ruleCallback(a, b));
+    if (this._rankingRule) {
+      const POINTS = {
+        GT: 1,
+        LT: -1,
+        EQ: 0,
+      };
+      result = result.sort((a, b) => POINTS[this._rankingRule(a, b)]);
     } else {
       result = result.sort();
     }
@@ -63,20 +80,16 @@ class ArrayOrdered {
 
   add(element) {
     if (!this._isProd) {
-      if (
-        this.size &&
-        this._isHomogeneous &&
-        typeof this.head !== typeof element
-      ) {
+      if (this.size && typeof this.head !== typeof element) {
         throw new TypeError(
-          "[ArrayOrdered] Type mismatch: use the same type for the entire array or set the isHomogeneous flag to false."
+          "[ArrayOrdered] Type mismatch: use the same type for the entire array."
         );
       }
     }
-    if (!this.size || this.last < element) {
+    if (!this.size || this._compare(this.last, element) === "LT") {
       this._data.push(element);
       return this;
-    } else if (this.head > element) {
+    } else if (this._compare(this.head, element) === "GT") {
       this._data = [element, ...this._data];
       return this;
     } else {
@@ -88,8 +101,14 @@ class ArrayOrdered {
       while (isLoop) {
         middle = Math.round((right - left) / 2) + left;
 
-        if (element < this._data[middle + 1] && element >= this._data[middle]) {
-          if (this._isUnique && element === this._data[middle]) {
+        if (
+          this._compare(element, this._data[middle + 1]) === "LT" &&
+          ["GT", "EQ"].includes(this._compare(element, this._data[middle]))
+        ) {
+          if (
+            this._isUnique &&
+            this._compare(element, this._data[middle]) === "EQ"
+          ) {
             isLoop = false;
             break;
           }
@@ -99,9 +118,9 @@ class ArrayOrdered {
             ...this._data.slice(middle + 1),
           ];
           isLoop = false;
-        } else if (element < this._data[middle]) {
+        } else if (this._compare(element, this._data[middle]) === "LT") {
           right = middle - 1;
-        } else if (element > this._data[middle]) {
+        } else if (this._compare(element, this._data[middle]) === "GT") {
           left = middle + 1;
         }
       }
@@ -160,9 +179,9 @@ class ArrayOrdered {
     while (left <= right) {
       middle = Math.round((right - left) / 2) + left;
 
-      if (element === this._data[middle]) {
+      if (this._compare(element, this._data[middle]) === "EQ") {
         return middle;
-      } else if (element < this._data[middle]) {
+      } else if (this._compare(element, this._data[middle]) === "LT") {
         right = middle - 1;
       } else {
         left = middle + 1;
