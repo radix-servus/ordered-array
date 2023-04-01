@@ -29,7 +29,6 @@ class ArrayOrdered {
 
   _compare(a, b) {
     if (this._rankingRule) {
-      console.log(this._rankingRule(a, b));
       return this._rankingRule(a, b);
     }
     if (a > b) {
@@ -122,6 +121,8 @@ class ArrayOrdered {
           right = middle - 1;
         } else if (this._compare(element, this._data[middle]) === "GT") {
           left = middle + 1;
+        } else {
+          throw new Error('[ArrayOrdered] Check that your rankingRule function is correctly comparing the existing values. Perhaps you incorrectly destructured the object?');
         }
       }
       return this;
