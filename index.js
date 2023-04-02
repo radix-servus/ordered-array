@@ -111,11 +111,7 @@ class ArrayOrdered {
             isLoop = false;
             break;
           }
-          this._data = [
-            ...this._data.slice(0, middle + 1),
-            element,
-            ...this._data.slice(middle + 1),
-          ];
+          this._data.splice(middle + 1, 0, element);
           isLoop = false;
         } else if (this._compare(element, this._data[middle]) === "LT") {
           right = middle - 1;
