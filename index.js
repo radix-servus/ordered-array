@@ -168,6 +168,10 @@ class ArrayOrdered {
     return true;
   }
 
+  has(element) {
+    return this.getElemIndex(element) !== -1;
+  }
+
   getElemIndex(element) {
     let left = 0;
     let right = this.size - 1;

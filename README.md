@@ -19,6 +19,7 @@ All elements of the array should be of the same type.
 - `delete` - deletes the specified element if it exists
 - `deletePrevious` - deletes all elements following the element if it exists (if `isIncludingCurrent = true`, the specified element is also deleted)
 - `deleteFollowing` - same as `deletePrevious`, but works with preceding elements
+- `has` - checks if an element exists
 - `getElemIndex` - get the index of an element
 
 ### Properties:
