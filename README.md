@@ -21,6 +21,7 @@ All elements of the array should be of the same type.
 - `deleteFollowing` - same as `deletePrevious`, but works with preceding elements
 - `has` - checks if an element exists
 - `getElemIndex` - get the index of an element
+- `clear` - clear the array
 
 ### Properties:
 - `size` - number of elements

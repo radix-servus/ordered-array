@@ -190,4 +190,9 @@ class ArrayOrdered {
     }
     return -1;
   }
+
+  clear() {
+    this._data = [];
+  }
+
 }
