@@ -1,8 +1,7 @@
-class ArrayOrdered {
+class List {
   constructor(settings) {
-    const { rankingRule, isUnique = true, isProd = false } = settings || {};
+    const { rankingRule, isProd = false } = settings || {};
     this._data = [];
-    this._isUnique = isUnique;
     this._isProd = isProd;
     this._rankingRule = rankingRule || null;
   }
@@ -60,9 +59,7 @@ class ArrayOrdered {
     }
 
     let result = array;
-    if (this._isUnique) {
-      result = [...new Set(result)];
-    }
+    result = [...new Set(result)];
     if (this._rankingRule) {
       const POINTS = {
         GT: 1,
@@ -100,17 +97,13 @@ class ArrayOrdered {
       while (isLoop) {
         middle = Math.round((right - left) / 2) + left;
 
-        if (
+        if (this._compare(element, this._data[middle]) === "EQ") {
+          isLoop = false;
+          break;
+        } else if (
           this._compare(element, this._data[middle + 1]) === "LT" &&
-          ["GT", "EQ"].includes(this._compare(element, this._data[middle]))
+          this._compare(element, this._data[middle]) === "GT"
         ) {
-          if (
-            this._isUnique &&
-            this._compare(element, this._data[middle]) === "EQ"
-          ) {
-            isLoop = false;
-            break;
-          }
           this._data.splice(middle + 1, 0, element);
           isLoop = false;
         } else if (this._compare(element, this._data[middle]) === "LT") {
@@ -118,7 +111,9 @@ class ArrayOrdered {
         } else if (this._compare(element, this._data[middle]) === "GT") {
           left = middle + 1;
         } else {
-          throw new Error('[ArrayOrdered] Check that your rankingRule function is correctly comparing the existing values. Perhaps you incorrectly destructured the object?');
+          throw new Error(
+            "[ArrayOrdered] Check that your rankingRule function is correctly comparing the existing values. Perhaps you incorrectly destructured the object?"
+          );
         }
       }
       return this;
@@ -194,5 +189,4 @@ class ArrayOrdered {
   clear() {
     this._data = [];
   }
-
 }

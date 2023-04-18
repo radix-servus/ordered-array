@@ -1,13 +1,12 @@
-## ArrayOrdered
+# Ordered List Data Structure
 
 An array that allows adding new elements in an ordered manner. The worst and average case complexity is O(log n), and the best case is O(1).
 
 #### Note:
 All elements of the array should be of the same type.
-
+Only exceptional values can be used.
 
 ### Settings:
-- `isUnique` - only unique values
 - `isProd` - production mode (disables some checks for faster performance)
 - `rankingRule` - is a function designed to establish its own rules for determining the order of elements. It takes two arguments and should handle three situations: when first arg is greater than second arg, when first arg is less than second arg, and when first arg is equal to second arg, returning 'GT', 'LT', or 'EQ' respectively.
 
@@ -33,7 +32,7 @@ All elements of the array should be of the same type.
 
 ### Examples of simple usage:
 ```
-const arr = new ArrayOrdered();
+const arr = new List();
 arr
   .create([1, 4, 5, 5, 3, 2, 6])
   .add(7)
@@ -55,7 +54,7 @@ arr.get; // [1, 2, 3, 4, 5, 7]
 
 ### Example usage of rankingRule:
 ```
-const arr = new ArrayOrdered({
+const arr = new List({
   rankingRule: (a, b) => {
     const [aYear, aMonth, aDay] = (a || '').split("::").map(Number);
     const [bYear, bMonth, bDay] = (b || '').split("::").map(Number);
