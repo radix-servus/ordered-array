@@ -4,7 +4,7 @@ An array that allows adding new elements in an ordered manner. The worst and ave
 
 #### Note:
 All elements of the array should be of the same type.
-Only exceptional values can be used.
+Only unique values can be used.
 
 ### Settings:
 - `isProd` - production mode (disables some checks for faster performance)
